@@ -1,26 +1,53 @@
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import supabase from '../lib/supabaseClient';
 
 export default function Home() {
+  const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [profiles, setProfiles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    fetchTasks();
-    fetchProfiles();
+    const getUserAndData = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) {
+        router.push('/login'); // redirect if not logged in
+      } else {
+        setUser(session.user);
+        await fetchTasks(session.user.id);
+        await fetchProfiles();
+        setLoading(false);
+      }
+    };
+
+    getUserAndData();
   }, []);
 
-  const fetchTasks = async () => {
-    const { data, error } = await supabase.from('tasks').select('*');
+  const fetchTasks = async (userId) => {
+    const { data, error } = await supabase
+      .from('tasks')
+      .select('*')
+      .eq('user_id', userId);
+
     if (error) console.error('Error fetching tasks:', error);
     else setTasks(data);
   };
 
   const fetchProfiles = async () => {
     const { data, error } = await supabase.from('users').select('*');
+
     if (error) console.error('Error fetching profiles:', error);
     else setProfiles(data);
   };
+
+  if (loading) {
+    return <div className="p-6">Loading...</div>;
+  }
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
