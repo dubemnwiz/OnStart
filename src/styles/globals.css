@@ -1,0 +1,86 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background-color: #f9fafb;
+  color: #333;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+h1 {
+  font-size: 1.8rem;
+  color: #1e3a8a;
+}
+
+h2 {
+  font-size: 1.4rem;
+  margin-top: 2rem;
+  color: #1e40af;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.card {
+  background-color: white;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 16px;
+}
+
+.task-title {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.task-date {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.links {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.links a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.button {
+  padding: 10px 16px;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #dc2626;
+}
+
+.loading {
+  text-align: center;
+  margin-top: 100px;
+  font-size: 1.2rem;
+  color: #555;
+}
