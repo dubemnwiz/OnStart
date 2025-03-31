@@ -59,16 +59,25 @@ export default function Home() {
   const fetchTasks = async () => {
     const { data, error } = await supabase
       .from('tasks')
-      .select('*')
-      .eq('user_id', '11111111-1111-1111-1111-111111111111');
+      .select('*');
     if (error) console.error('Error fetching tasks:', error);
     else setTasks(data);
   };
 
   const fetchProfiles = async () => {
-    const { data, error } = await supabase.from('users').select('*');
-    if (error) console.error('Error fetching profiles:', error);
-    else setProfiles(data);
+    const user = await supabase.auth.getUser();
+    const userId = user?.data?.user?.id;
+  
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .neq('id', userId);
+  
+    if (error) {
+      console.error('Error fetching profiles:', error);
+    } else {
+      setProfiles(data);
+    }
   };
 
   if (loading) {
