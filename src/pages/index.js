@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import supabase from '../lib/supabaseClient';
+import TaskCard from '../components/TaskCard';
+import ProfileCard from '../components/ProfileCard';
 
 export default function Home() {
   const [user, setUser] = useState(null);
@@ -97,10 +99,7 @@ export default function Home() {
         <h2>Onboarding Task Checklist</h2>
         <ul className="list">
           {tasks.map((task) => (
-            <li key={task.id} className="card">
-              <p className="task-title">{task.title}</p>
-              <p className="task-date">Due: {task.due_date}</p>
-            </li>
+            <TaskCard task={task}/>
           ))}
         </ul>
       </section>
@@ -109,17 +108,7 @@ export default function Home() {
         <h2>Networking Recommendations</h2>
         <ul className="list">
           {profiles.map((profile) => (
-            <li key={profile.id} className="card">
-              <p><strong>{profile.full_name}</strong></p>
-              <p>Role: {profile.role}</p>
-              <p>Location: {profile.location}</p>
-              <p>Interests: {profile.interests?.join(', ')}</p>
-              <div className="links">
-                <a href={`mailto:${profile.email}`}>Email</a>
-                <a href={profile.linkedin_url} target="_blank" rel="noreferrer">LinkedIn</a>
-                <a href={profile.calendly_url} target="_blank" rel="noreferrer">Book Meeting</a>
-              </div>
-            </li>
+            <ProfileCard profile={profile}/>
           ))}
         </ul>
       </section>
