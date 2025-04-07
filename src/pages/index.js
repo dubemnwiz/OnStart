@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import supabase from '../lib/supabaseClient';
+import TaskCard from '../components/TaskCard';
+import ProfileCard from '../components/ProfileCard';
 
 export default function Home() {
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [view, setView] = useState('tasks');
   const router = useRouter();
 
   const createUserIfNotExists = async (user) => {
@@ -39,7 +42,7 @@ export default function Home() {
 
   useEffect(() => {
     const getUserAndData = async () => {
-      const { data, error } = await supabase.auth.getSession();
+      const { data } = await supabase.auth.getSession();
 
       if (!data?.session) {
         router.push('/login');
@@ -57,9 +60,7 @@ export default function Home() {
   }, []);
 
   const fetchTasks = async () => {
-    const { data, error } = await supabase
-      .from('tasks')
-      .select('*');
+    const { data, error } = await supabase.from('tasks').select('*');
     if (error) console.error('Error fetching tasks:', error);
     else setTasks(data);
   };
@@ -67,65 +68,52 @@ export default function Home() {
   const fetchProfiles = async () => {
     const user = await supabase.auth.getUser();
     const userId = user?.data?.user?.id;
-  
+
     const { data, error } = await supabase
       .from('users')
       .select('*')
       .neq('id', userId);
-  
-    if (error) {
-      console.error('Error fetching profiles:', error);
-    } else {
-      setProfiles(data);
-    }
+
+    if (error) console.error('Error fetching profiles:', error);
+    else setProfiles(data);
   };
 
-  if (loading) {
-    return <div className="loading">Loading...</div>;
-  }
+  if (loading) return <div className="loading">Loading...</div>;
 
   return (
-    <div className="container">
-      <div className="header">
-        <h1>Welcome, {user?.email}</h1>
-        <button className="button" onClick={handleSignOut}>
+    <div className="layout">
+      <aside className="sidebar">
+        <h2 className="sidebar-title">On-Start</h2>
+        <ul className="nav">
+          <li className={view === 'tasks' ? 'active' : ''} onClick={() => setView('tasks')}>
+            📋 Tasks
+          </li>
+          <li className={view === 'networking' ? 'active' : ''} onClick={() => setView('networking')}>
+            🤝 Networking
+          </li>
+        </ul>
+        <button className="button signout" onClick={handleSignOut}>
           Sign Out
         </button>
-      </div>
+      </aside>
 
-      <section>
-        <h2>Onboarding Task Checklist</h2>
-        <ul className="list">
+      <main className="main">
+        <h1>{view === 'tasks' ? 'Onboarding Task Checklist' : 'Networking Recommendations'}</h1>
 
-          {/* use this to create task card component */}
-          {tasks.map((task) => (
-            <li key={task.id} className="card">
-              <p className="task-title">{task.title}</p>
-              <p className="task-date">Due: {task.due_date}</p>
-            </li>
-          ))}
-          
-        </ul>
-      </section>
-
-      <section>
-        <h2>Networking Recommendations</h2>
-        <ul className="list">
-          {profiles.map((profile) => (
-            <li key={profile.id} className="card">
-              <p><strong>{profile.full_name}</strong></p>
-              <p>Role: {profile.role}</p>
-              <p>Location: {profile.location}</p>
-              <p>Interests: {profile.interests?.join(', ')}</p>
-              <div className="links">
-                <a href={`mailto:${profile.email}`}>Email</a>
-                <a href={profile.linkedin_url} target="_blank" rel="noreferrer">LinkedIn</a>
-                <a href={profile.calendly_url} target="_blank" rel="noreferrer">Book Meeting</a>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
+        {view === 'tasks' ? (
+          <ul className="list">
+            {tasks.map((task) => (
+              <TaskCard key={task.id} task={task} />
+            ))}
+          </ul>
+        ) : (
+          <ul className="list">
+            {profiles.map((profile) => (
+              <ProfileCard key={profile.id} profile={profile} />
+            ))}
+          </ul>
+        )}
+      </main>
     </div>
   );
 }
