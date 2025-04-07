@@ -85,6 +85,7 @@ export default function Home() {
       <aside className="sidebar">
         <h2 className="sidebar-title">On-Start</h2>
         <ul className="nav">
+          
           <li className={view === 'tasks' ? 'active' : ''} onClick={() => setView('tasks')}>
             📋 Tasks
           </li>
@@ -92,6 +93,7 @@ export default function Home() {
             🤝 Networking
           </li>
         </ul>
+        <a href="/profile" style={{ color: 'white', marginTop: '1rem' }}>Edit Profile</a>
         <button className="button signout" onClick={handleSignOut}>
           Sign Out
         </button>
