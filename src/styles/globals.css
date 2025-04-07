@@ -1,9 +1,11 @@
 body {
   margin: 0;
-  padding: 0;
+  padding: 2rem;
   font-family: sans-serif;
-  background-color: #f9fafb;
-  color: #333;
+  background-color: #261f4b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .container {
@@ -13,21 +15,29 @@ body {
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
+  background-color: #7c4db4;
+  border-radius: 16px;
+  padding: 24px 16px;
+  text-align: center;
+  margin-bottom: 24px;
+  width: 95%;
   align-items: center;
-  margin-bottom: 2rem;
+  text-decoration: white;
+
 }
 
 h1 {
   font-size: 1.8rem;
-  color: #1e3a8a;
+  color: white;
 }
 
 h2 {
-  font-size: 1.4rem;
-  margin-top: 2rem;
-  color: #1e40af;
+  padding: 24px 16px;
+  text-align: left;
+  margin-bottom: 24px;
+  width: 95%;
+  align-items: center;
+  color: white;
 }
 
 .list {
@@ -61,7 +71,7 @@ h2 {
 }
 
 .links a {
-  color: #2563eb;
+  color: #261f4b;
   text-decoration: underline;
 }
 
