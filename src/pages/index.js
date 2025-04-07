@@ -9,6 +9,7 @@ export default function Home() {
   const [tasks, setTasks] = useState([]);
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [view, setView] = useState('tasks');
   const router = useRouter();
 
   const createUserIfNotExists = async (user) => {
@@ -41,7 +42,7 @@ export default function Home() {
 
   useEffect(() => {
     const getUserAndData = async () => {
-      const { data, error } = await supabase.auth.getSession();
+      const { data } = await supabase.auth.getSession();
 
       if (!data?.session) {
         router.push('/login');
@@ -59,9 +60,7 @@ export default function Home() {
   }, []);
 
   const fetchTasks = async () => {
-    const { data, error } = await supabase
-      .from('tasks')
-      .select('*');
+    const { data, error } = await supabase.from('tasks').select('*');
     if (error) console.error('Error fetching tasks:', error);
     else setTasks(data);
   };
@@ -69,49 +68,54 @@ export default function Home() {
   const fetchProfiles = async () => {
     const user = await supabase.auth.getUser();
     const userId = user?.data?.user?.id;
-  
+
     const { data, error } = await supabase
       .from('users')
       .select('*')
       .neq('id', userId);
-  
-    if (error) {
-      console.error('Error fetching profiles:', error);
-    } else {
-      setProfiles(data);
-    }
+
+    if (error) console.error('Error fetching profiles:', error);
+    else setProfiles(data);
   };
 
-  if (loading) {
-    return <div className="loading">Loading...</div>;
-  }
+  if (loading) return <div className="loading">Loading...</div>;
 
   return (
-    <div className="container">
-      <div className="header">
-        <h1>Welcome, {user?.email}</h1>
-        <button className="button" onClick={handleSignOut}>
+    <div className="layout">
+      <aside className="sidebar">
+        <h2 className="sidebar-title">On-Start</h2>
+        <ul className="nav">
+          
+          <li className={view === 'tasks' ? 'active' : ''} onClick={() => setView('tasks')}>
+            📋 Tasks
+          </li>
+          <li className={view === 'networking' ? 'active' : ''} onClick={() => setView('networking')}>
+            🤝 Networking
+          </li>
+        </ul>
+        <a href="/profile" style={{ color: 'white', marginTop: '1rem' }}>Edit Profile</a>
+        <button className="button signout" onClick={handleSignOut}>
           Sign Out
         </button>
-      </div>
+      </aside>
 
-      <section>
-        <h2>Onboarding Task Checklist</h2>
-        <ul className="list">
-          {tasks.map((task) => (
-            <TaskCard task={task}/>
-          ))}
-        </ul>
-      </section>
+      <main className="main">
+        <h1>{view === 'tasks' ? 'Onboarding Task Checklist' : 'Networking Recommendations'}</h1>
 
-      <section>
-        <h2>Networking Recommendations</h2>
-        <ul className="list">
-          {profiles.map((profile) => (
-            <ProfileCard profile={profile}/>
-          ))}
-        </ul>
-      </section>
+        {view === 'tasks' ? (
+          <ul className="list">
+            {tasks.map((task) => (
+              <TaskCard key={task.id} task={task} />
+            ))}
+          </ul>
+        ) : (
+          <ul className="list">
+            {profiles.map((profile) => (
+              <ProfileCard key={profile.id} profile={profile} />
+            ))}
+          </ul>
+        )}
+      </main>
     </div>
   );
 }
