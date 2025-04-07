@@ -96,12 +96,15 @@ export default function Home() {
       <section>
         <h2>Onboarding Task Checklist</h2>
         <ul className="list">
+
+          {/* use this to create task card component */}
           {tasks.map((task) => (
             <li key={task.id} className="card">
               <p className="task-title">{task.title}</p>
               <p className="task-date">Due: {task.due_date}</p>
             </li>
           ))}
+          
         </ul>
       </section>
 
