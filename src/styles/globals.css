@@ -1,124 +1,281 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
-  background-color: #f9fafb;
-  color: #333;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: white;
+  color: black;
 }
 
-.layout {
+.network-layout {
   display: flex;
   height: 100vh;
+  overflow: hidden;
 }
 
-.sidebar {
-  flex: 1;
-  background-color: #1e3a8a;
-  color: white;
+.left-sidebar {
+  width: 250px;
+  background: linear-gradient(to bottom right, #f3e5f5, #e3f2fd);;
   padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 20px;
 }
 
-.sidebar-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 2rem;
+.nav-links {
+  padding-left: 20;
 }
 
-.nav {
+.nav-links li {
   list-style: none;
-  padding: 0;
-}
-
-.nav li {
-  padding: 0.5rem 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   cursor: pointer;
-  border-radius: 6px;
+  font-weight: 500;
+  color: black;
+  transition: color 0.2s;
+  margin-left: -15px;
 }
 
-.nav li:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+.nav-links li:hover {
+  color: #c5a3f4;
 }
 
-.nav li.active {
-  background-color: rgba(255, 255, 255, 0.2);
-  font-weight: bold;
+.nav-links li.active {
+  background-color: rgb(231, 227, 253);
+  color: black;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
 }
 
-.container {
-  flex: 4;
-  padding: 2rem;
-  background-color: #f3f4f6;
+.progress-bar {
+  height: 6px;
+  width: 40px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  border: 1px solid rgb(193, 193, 193);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #22c55e;
+  width: 15%; /* You can make this dynamic later */
+}
+
+
+.network-main {
+  flex: 1;
+  padding: 0.5rem 2rem;
+  background-color: white;
   overflow-y: auto;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.network-main.tasks {
+  background: #f3e5f5;
+  color: #333;
+}
+
+.network-main.networking {
+  background-color: white;
+  color: white;
+}
+
+.network-title {
+  background: #e7e3fd;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  padding: 2rem;
+  border-radius: 12px;
   margin-bottom: 2rem;
 }
 
-h1 {
-  font-size: 1.8rem;
-  color: #1e3a8a;
-}
-
-h2 {
-  font-size: 1.4rem;
-  margin-top: 2rem;
-  color: #1e40af;
-}
-
-.list {
-  list-style: none;
-  padding: 0;
+.network-columns {
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.network-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.network-column {
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); */
+  max-height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.network-column h2 {
+  margin-bottom: 0.5rem;
+}
+
+.scrollable-column {
+  overflow-y: auto;
+  display: flex;
   flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.scrollable-column > .profile-card {
+  flex: 0 0 calc(22% - 0.75rem); /* 3 per row with gap */
+  max-width: calc(22% - 0.75rem);
+  min-width: calc(22% - 0.75rem);
+}
+
+.section h2 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 .card {
   background-color: white;
-  padding: 16px;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  margin-bottom: 16px;
-  width: 100%;
-  max-width: 350px;
+  padding: 1rem;
+  width: 180px;
+  text-align: center;
+  color: white;
+  transition: transform 0.2s ease;
 }
 
-.task-title {
-  font-weight: bold;
-  font-size: 1.1rem;
+.card:hover {
+  transform: translateY(-4px);
 }
 
-.task-date {
-  font-size: 0.85rem;
-  color: #555;
+.card img {
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
 }
 
-.links {
-  margin-top: 0.5rem;
+.card button {
+  background-color: #c5a3f4;
+  color: white;
+  padding: 0.4rem 1rem;
+  border: none;
+  border-radius: 8px;
+  margin-top: 0.8rem;
+  cursor: pointer;
+}
+
+.groupchat-grid {
   display: flex;
   gap: 1rem;
 }
 
-.links a {
-  color: #2563eb;
-  text-decoration: underline;
+.groupchat {
+  background: linear-gradient(to bottom right, #f3e5f5, #e3f2fd);;
+  padding: 1rem;
+  border-radius: 12px;
+  width: 200px;
+}
+
+.groupchat button {
+  margin-top: 1rem;
+  width: 100%;
+  background-color: #c5a3f4;
+  border: none;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 6px;
+}
+
+.profile-header img.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 13%;
+  object-fit: cover;
+  object-position: center;
+
+}
+
+.connections {
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.connections-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.connection-list {
+  list-style: none;
+  padding: 0;
+}
+
+.connection-list li {
+  background-color: white;
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-left: 40px;
+  border-left: 3px solid rgb(231, 227, 253);
+  margin-top: 2rem;
+}
+
+.timeline-section {
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.timeline-marker {
+  position: absolute;
+  left: -80px;
+  top: 0;
+  width: 150px;
+  text-align: right;
+}
+
+.timeline-label {
+  background-color: rgb(231, 227, 253);
+  color: black;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.timeline-tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .button {
   padding: 10px 16px;
-  background-color: #ef4444;
-  color: white;
+  background-color: rgb(231, 227, 253);
+  color: black;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s ease;
+  margin-top: 2rem;
 }
 
 .button:hover {
@@ -129,6 +286,37 @@ h2 {
   text-align: center;
   margin-top: 100px;
   font-size: 1.2rem;
-  color: #555;
+  color: #ccc;
 }
- 
+
+.see-all {
+  font-size: 0.85rem;
+  align-self: flex-end;
+}
+
+.sidebar-profile {
+  margin-top: 4rem;
+  display: flex;
+  gap: 10px;
+}
+
+.sidebar-profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-self: center;
+}
+
+.logo {
+  color: #7e57c2;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  position: absolute;
+  top: 20px;
+  left: 40px;
+}
+
+.connections li:hover {
+  background-color: rgb(231, 227, 253);
+}

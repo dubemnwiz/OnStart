@@ -1,0 +1,140 @@
+.profile-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 200px;
+  height: 220px;
+  text-align: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.profile-picture {
+  width: 80px;
+  height: 80px;
+  border-radius: 4px;
+  object-fit: cover;
+  align-self: flex-start;
+}
+
+.profile-card-info-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.profile-name {
+  font-weight: bold;
+  font-size: 18px;
+  color: black;
+}
+
+.profile-role-location {
+  color: black;
+  font-size: 14px;
+  justify-self: flex-start;
+  text-align: left;
+}
+
+.connect-button {
+  margin-top: 12px;
+  padding: 10px 16px;
+  background-color: rgb(231, 227, 253);
+  color: black;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.connect-button:hover {
+  background-color: rgb(215, 208, 253);
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popup-card {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 16px;
+  width: 340px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.popup-picture {
+  width: 80px;
+  height: 80px;
+  border-radius: 4px;
+  object-fit: cover;
+  object-position: center;
+  margin: 0 auto 1rem;
+}
+
+.popup-name {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0.25rem 0;
+}
+
+.popup-role-location {
+  color: #777;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.popup-description {
+  font-size: 0.9rem;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.popup-icons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.popup-icons a {
+  color: #555;
+  transition: color 0.2s ease;
+}
+
+.popup-icons a:hover {
+  color: #7e57c2;
+}
+
+.popup-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.profile-card-info {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: flex-start;
+}
