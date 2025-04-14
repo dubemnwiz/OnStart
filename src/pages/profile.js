@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import supabase from '../lib/supabaseClient';
+import Select from 'react-select';
+import '../styles/profile.css';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -10,10 +12,84 @@ export default function ProfilePage() {
     role: '',
     team: '',
     location: '',
+    description: '',
     interests: '',
     linkedin_url: '',
     calendly_url: '',
+    picture_url: null,
   });
+
+  const roleOptions = [
+    { value: 'Intern', label: 'Intern' },
+    { value: 'New Grad', label: 'New Grad' },
+    { value: 'Software Engineer', label: 'Software Engineer' },
+    { value: 'Product Manager', label: 'Product Manager' },
+    { value: 'Designer', label: 'Designer' },
+  ];
+
+  const locationOptions = [
+    { value: 'New York', label: 'New York' },
+    { value: 'San Francisco', label: 'San Francisco' },
+    { value: 'Remote', label: 'Remote' },
+    { value: 'Austin', label: 'Austin' },
+    { value: 'Seattle', label: 'Seattle' },
+  ];
+
+  const interestOptions = [
+    { value: 'Photography', label: 'Photography' },
+    { value: 'Videography', label: 'Videography' },
+    { value: 'Graphic Design', label: 'Graphic Design' },
+    { value: 'Digital Art', label: 'Digital Art' },
+    { value: 'Animation', label: 'Animation' },
+    { value: 'Writing', label: 'Writing' },
+    { value: 'Journaling', label: 'Journaling' },
+    { value: 'Poetry', label: 'Poetry' },
+    { value: 'Music Production', label: 'Music Production' },
+    { value: 'Singing', label: 'Singing' },
+    { value: 'Playing Instruments', label: 'Playing Instruments' },
+    { value: 'Podcasting', label: 'Podcasting' },
+    { value: 'Acting', label: 'Acting' },
+    { value: 'Fashion Design', label: 'Fashion Design' },
+    { value: 'Crafting / DIY', label: 'Crafting / DIY' },
+    { value: 'Interior Design', label: 'Interior Design' },
+    { value: 'Fitness', label: 'Fitness' },
+    { value: 'Yoga', label: 'Yoga' },
+    { value: 'Meditation', label: 'Meditation' },
+    { value: 'Nutrition', label: 'Nutrition' },
+    { value: 'Cooking', label: 'Cooking' },
+    { value: 'Baking', label: 'Baking' },
+    { value: 'Gardening', label: 'Gardening' },
+    { value: 'Hiking', label: 'Hiking' },
+    { value: 'Running', label: 'Running' },
+    { value: 'Travel', label: 'Travel' },
+    { value: 'Video Games', label: 'Video Games' },
+    { value: 'Board Games', label: 'Board Games' },
+    { value: 'Puzzle Solving', label: 'Puzzle Solving' },
+    { value: 'Reading', label: 'Reading' },
+    { value: 'Watching Movies', label: 'Watching Movies' },
+    { value: 'Anime', label: 'Anime' },
+    { value: 'Binge-watching Shows', label: 'Binge-watching Shows' },
+    { value: 'K-pop / Pop Culture', label: 'K-pop / Pop Culture' },
+    { value: 'Escape Rooms', label: 'Escape Rooms' },
+    { value: 'Learning New Languages', label: 'Learning New Languages' },
+    { value: 'Public Speaking', label: 'Public Speaking' },
+    { value: 'Debate', label: 'Debate' },
+    { value: 'Philosophy', label: 'Philosophy' },
+    { value: 'Psychology', label: 'Psychology' },
+    { value: 'History', label: 'History' },
+    { value: 'Self-Improvement', label: 'Self-Improvement' },
+    { value: 'Online Courses', label: 'Online Courses' },
+    { value: 'Mentorship', label: 'Mentorship' },
+    { value: 'Volunteering', label: 'Volunteering' },
+    { value: 'Networking', label: 'Networking' },
+    { value: 'Activism', label: 'Activism' },
+    { value: 'Sustainability', label: 'Sustainability' },
+    { value: 'Cultural Exchange', label: 'Cultural Exchange' },
+    { value: 'Event Planning', label: 'Event Planning' },
+    { value: 'Community Building', label: 'Community Building' },
+    { value: 'Social Media Content', label: 'Social Media Content' },
+    { value: 'Organizing Meetups', label: 'Organizing Meetups' },
+  ];
 
   useEffect(() => {
     const loadUser = async () => {
@@ -39,9 +115,11 @@ export default function ProfilePage() {
           role: data.role || '',
           team: data.team || '',
           location: data.location || '',
+          description: data.description || '',
           interests: data.interests?.join(', ') || '',
           linkedin_url: data.linkedin_url || '',
           calendly_url: data.calendly_url || '',
+          picture_url: null,
         });
       }
     };
@@ -55,11 +133,12 @@ export default function ProfilePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const payload = {
       id: userId,
       ...form,
-      interests: form.interests.split(',').map((i) => i.trim()),
+      interests: Array.isArray(form.interests)
+        ? form.interests
+        : form.interests.split(',').map((i) => i.trim()),
     };
 
     const { error } = await supabase.from('users').upsert(payload);
@@ -73,37 +152,89 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="container">
-      <h1>Edit Your Profile</h1>
-      <form onSubmit={handleSubmit}>
-        {['full_name', 'role', 'team', 'location', 'linkedin_url', 'calendly_url'].map((field) => (
-          <div key={field} style={{ marginBottom: '1rem' }}>
-            <label>{field.replace('_', ' ')}:</label>
+    <div className="profile-page">
+      <div className="profile-box">
+        <h1>Edit Your Profile</h1>
+        <form onSubmit={handleSubmit}>
+          <div style={{ marginBottom: '1rem' }}>
+            <label>Full Name</label>
+            <p>{form.full_name}</p>
+          </div>
+
+          <div style={{ marginBottom: '1rem' }}>
+            <label>Role</label>
+            <p>{form.role}</p>
+          </div>
+
+          <div style={{ marginBottom: '1rem' }}>
+            <label>Team</label>
+            <p>{form.team}</p>
+          </div>
+
+          <div style={{ marginBottom: '1rem' }}>
+            <label>Location</label>
+            <p>{form.location}</p>
+          </div>
+
+          <div style={{ marginBottom: '1rem' }}>
+            <label>Upload Profile Picture</label>
             <input
-              name={field}
-              type="text"
-              value={form[field]}
-              onChange={handleChange}
-              className="card"
-              style={{ width: '100%', padding: '8px', marginTop: '4px' }}
+              type="file"
+              name="profile_picture"
+              accept="image/*"
+              onChange={(e) => setForm({ ...form, picture_url: e.target.files[0] })}
             />
           </div>
-        ))}
 
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Interests (comma-separated):</label>
-          <input
-            name="interests"
-            type="text"
-            value={form.interests}
-            onChange={handleChange}
-            className="card"
-            style={{ width: '100%', padding: '8px', marginTop: '4px' }}
-          />
-        </div>
+          <div style={{ marginBottom: '1rem' }}>
+            <label>Description</label>
+            <textarea
+              name="description"
+              rows="5"
+              value={form.description}
+              onChange={handleChange}
+              placeholder="Tell us a little about yourself..."
+              style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ccc' }}
+            />
+          </div>
 
-        <button type="submit" className="button">Save Profile</button>
-      </form>
+          <div style={{ marginBottom: '1rem' }}>
+            <label>Interests</label>
+            <Select
+              isMulti
+              name="interests"
+              options={interestOptions}
+              value={interestOptions.filter(opt => form.interests.includes(opt.value))}
+              onChange={(selected) => setForm({ ...form, interests: selected.map((s) => s.value) })}
+              className="react-select-container"
+              classNamePrefix="select"
+              placeholder="Search or select interests..."
+            />
+          </div>
+
+          <div style={{ marginBottom: '1rem' }}>
+            <label>LinkedIn URL</label>
+            <input
+              name="linkedin_url"
+              type="text"
+              value={form.linkedin_url}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div style={{ marginBottom: '1rem' }}>
+            <label>Calendly URL</label>
+            <input
+              name="calendly_url"
+              type="text"
+              value={form.calendly_url}
+              onChange={handleChange}
+            />
+          </div>
+
+          <button type="submit" className="button">Save Profile</button>
+        </form>
+      </div>
     </div>
   );
 }
