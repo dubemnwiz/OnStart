@@ -4,7 +4,6 @@ export default function UploadModal({ onClose }) {
   const [files, setFiles] = useState(null);
 
   const handleUpload = () => {
-    // logic to send to Supabase Storage or backend here
     alert('Files submitted!');
     onClose();
   };
@@ -14,6 +13,7 @@ export default function UploadModal({ onClose }) {
       <div className="popup-content" onClick={(e) => e.stopPropagation()}>
         <button className="popup-close" onClick={onClose}>✕</button>
         <h2>Upload Onboarding Documents</h2>
+        <p> Submit your ID and signed offer letter</p>
         <input
           type="file"
           multiple

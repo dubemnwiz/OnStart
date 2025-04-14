@@ -182,7 +182,7 @@ export default function Home() {
             </ul>
           </div>
         </nav>
-        <button className="button signout" onClick={handleSignOut}>
+        <button className="button" onClick={handleSignOut}>
           Sign Out
         </button>
       </aside>

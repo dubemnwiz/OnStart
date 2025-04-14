@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import supabase from '../lib/supabaseClient';
 import Select from 'react-select';
@@ -6,6 +6,8 @@ import '../styles/profile.css';
 
 export default function ProfilePage() {
   const router = useRouter();
+  const fileInputRef = useRef();
+
   const [userId, setUserId] = useState(null);
   const [form, setForm] = useState({
     full_name: '',
@@ -119,7 +121,7 @@ export default function ProfilePage() {
           interests: data.interests?.join(', ') || '',
           linkedin_url: data.linkedin_url || '',
           calendly_url: data.calendly_url || '',
-          picture_url: null,
+          picture_url: data.picture_url || null,
         });
       }
     };
@@ -151,39 +153,51 @@ export default function ProfilePage() {
     }
   };
 
+  const triggerFileSelect = () => fileInputRef.current.click();
+
   return (
     <div className="profile-page">
       <div className="profile-box">
         <h1>Edit Your Profile</h1>
         <form onSubmit={handleSubmit}>
+          <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
+            <label htmlFor="profile_picture">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={form.picture_url ? `/media/${form.picture_url}` : '/media/default-avatar.png'}
+                alt="Profile"
+                className="profile-upload-preview"
+                onClick={triggerFileSelect}
+              />
+            </label>
+            <input
+              ref={fileInputRef}
+              type="file"
+              name="profile_picture"
+              accept="image/*"
+              style={{ display: 'none' }}
+              onChange={(e) => setForm({ ...form, picture_url: e.target.files[0].name })}
+            />
+          </div>
+
           <div style={{ marginBottom: '1rem' }}>
             <label>Full Name</label>
-            <p>{form.full_name}</p>
+            <div>{form.full_name}</div>
           </div>
 
           <div style={{ marginBottom: '1rem' }}>
             <label>Role</label>
-            <p>{form.role}</p>
+            <div>{form.role}</div>
           </div>
 
           <div style={{ marginBottom: '1rem' }}>
             <label>Team</label>
-            <p>{form.team}</p>
+            <div>{form.team}</div>
           </div>
 
           <div style={{ marginBottom: '1rem' }}>
             <label>Location</label>
-            <p>{form.location}</p>
-          </div>
-
-          <div style={{ marginBottom: '1rem' }}>
-            <label>Upload Profile Picture</label>
-            <input
-              type="file"
-              name="profile_picture"
-              accept="image/*"
-              onChange={(e) => setForm({ ...form, picture_url: e.target.files[0] })}
-            />
+            <div>{form.location}</div>
           </div>
 
           <div style={{ marginBottom: '1rem' }}>

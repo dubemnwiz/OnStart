@@ -5,9 +5,9 @@ export default function VideoModal({ onClose }) {
       <div className="popup-overlay" onClick={onClose}>
         <div className="popup-content" onClick={(e) => e.stopPropagation()}>
           <button className="popup-close" onClick={onClose}>✕</button>
-          <h2>Onboarding Video</h2>
+          <h2>Welcome to [company]</h2>
           <video width="100%" controls>
-            <source src="/media/onboarding-video.mp4" type="video/mp4" />
+            <source src="/media/onboarding.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
