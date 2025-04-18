@@ -20,6 +20,9 @@ export default function ProfileCard({ profile }) {
             <div className="profile-role-location">{profile.team}</div>
           </div>
         </div>
+        {profile.matchScore !== undefined && (
+          <p className="match-score">Match Score: {profile.matchScore}</p>
+        )}
         <button className="connect-button" onClick={handleConnect}>Connect</button>
       </div>
 
@@ -32,6 +35,10 @@ export default function ProfileCard({ profile }) {
             <p className="popup-role-location">{profile.role} | {profile.location}</p>
             <p className="popup-role-location">{profile.team}</p>
             <p className="popup-description">{profile.description}</p>
+            <p className="popup-description">
+              <strong>Interests:</strong> {Array.isArray(profile.interests) ? profile.interests.join(', ') : profile.interests}
+            </p>
+
 
             <div className="popup-icons">
               {profile.email && (
