@@ -3,9 +3,13 @@ import { useRouter } from 'next/router';
 import supabase from '../lib/supabaseClient';
 import TaskCard from '../components/TaskCard';
 import ProfileCard from '../components/ProfileCard';
+import Modules from '../components/Modules';
+import AskAI from '../components/AskAI';
 import VideoModal from '../components/modals/VideoModal';
 import ValuesModal from '../components/modals/ValuesModal';
 import UploadModal from '../components/modals/UploadModal';
+import MentorModal from '../components/modals/MentorModal';
+import DevEnvModal from '../components/modals/DevEnvModal';
 import Link from 'next/link';
 
 export default function Home() {
@@ -16,7 +20,21 @@ export default function Home() {
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState('tasks');
+
   const router = useRouter();
+
+  const getRecommendationScore = (currentUser, otherUser) => {
+    if (!currentUser || !otherUser) return 0;
+  
+    const interestsA = new Set(currentUser.interests || []);
+    const interestsB = new Set(otherUser.interests || []);
+    const sharedInterests = [...interestsA].filter(i => interestsB.has(i)).length;
+  
+    const sameLocation = currentUser.location === otherUser.location ? 1 : 0;
+    const sameRole = currentUser.role === otherUser.role ? 1 : 0;
+  
+    return sharedInterests * 2 + sameLocation * 5 + sameRole * 3;
+  };  
 
   const createUserIfNotExists = async (user) => {
     const { data } = await supabase
@@ -118,8 +136,17 @@ export default function Home() {
 
   if (loading) return <div className="loading">Loading...</div>;
 
-  const employees = profiles.filter((p) => p.is_employee);
-  const interns = profiles.filter((p) => !p.is_employee);
+  const recommendedProfiles = profiles
+  .filter(p => p.id !== user?.id)
+  .map(profile => ({
+    ...profile,
+    matchScore: getRecommendationScore(userProfile, profile)
+  }))
+  .sort((a, b) => b.matchScore - a.matchScore);
+
+  const employees = recommendedProfiles.filter(p => p.is_employee);
+  const interns = recommendedProfiles.filter(p => !p.is_employee);
+
   const groupchats = [];
 
   return (
@@ -127,6 +154,9 @@ export default function Home() {
       {activeModal === 'video' && <VideoModal onClose={() => setActiveModal(null)} />}
       {activeModal === 'values' && <ValuesModal onClose={() => setActiveModal(null)} />}
       {activeModal === 'upload' && <UploadModal onClose={() => setActiveModal(null)} />}
+      {activeModal === 'mentor' && <MentorModal onClose={() => setActiveModal(null)} />}
+      {activeModal === 'devenv' && <DevEnvModal onClose={() => setActiveModal(null)} />}
+
 
       <aside className="left-sidebar">
         <div class="logo">OnStart</div>
@@ -166,12 +196,22 @@ export default function Home() {
             >
               Network
             </li>
-            <li>Modules</li>
-            <li>AskAI</li>
+            <li
+              className={view === 'modules' ? 'active' : ''}
+              onClick={() => setView('modules')}
+            >
+              Modules
+            </li>
+            <li
+              className={view === 'askai' ? 'active' : ''}
+              onClick={() => setView('askai')}
+            >
+              AskAI
+            </li>
           </ul>
           <div className="connections">
             <div className="connections-header">
-              <div><strong>Quick Connections</strong></div>
+              <div><strong>Connections</strong></div>
               <div className='see-all'>See all</div>
             </div>
             <ul className="connection-list">
@@ -187,55 +227,58 @@ export default function Home() {
         </button>
       </aside>
 
-      <main className="network-main">
-        
+      <main className={`network-main ${view}`}>
         {view === 'tasks' ? (
-          <h1 className="network-title">Welcome, {userProfile?.full_name || 'Name'} - 74 days until start!</h1>
-        ) : (
-          <h1 className="network-title">Build your network at [company]</h1>
-        )}
-
-        {view === 'tasks' ? (
-          <div className="timeline">
-            {Object.entries(groupTasksByMilestone(tasks)).map(([milestone, group]) => (
-              <div key={milestone} className="timeline-section">
-                <div className="timeline-marker">
-                  <span className="timeline-label">{milestone}</span>
+          <>
+            <h1 className="network-title">Welcome, {userProfile?.full_name || 'Name'} - 74 days until start!</h1>
+            <div className="timeline">
+              {Object.entries(groupTasksByMilestone(tasks)).map(([milestone, group]) => (
+                <div key={milestone} className="timeline-section">
+                  <div className="timeline-marker">
+                    <span className="timeline-label">{milestone}</span>
+                  </div>
+                  <div className="timeline-tasks">
+                    {group.map((task) => (
+                      <TaskCard key={task.id} task={task} onTaskClick={handleTaskClick} />
+                    ))}
+                  </div>
                 </div>
-                <div className="timeline-tasks">
-                  {group.map((task) => (
-                    <TaskCard key={task.id} task={task} onTaskClick={handleTaskClick} />
+              ))}
+            </div>
+          </>
+        ) : view === 'networking' ? (
+          <>
+            <h1 className="network-title">Build your network at [company]</h1>
+            <div className="network-columns">
+              <div className="network-column">
+                <h2>Employees</h2>
+                <div className="scrollable-column">
+                  {employees.map((profile) => (
+                    <ProfileCard key={profile.id} profile={profile} />
                   ))}
                 </div>
               </div>
-            ))}
-          </div>
-        ) : (
-          <div className="network-columns">
-            <div className="network-column">
-              <h2>Employees</h2>
-              <div className="scrollable-column">
-                {employees.map((profile) => (
-                  <ProfileCard key={profile.id} profile={profile} />
-                ))}
+              <div className="network-column">
+                <h2>Interns</h2>
+                <div className="scrollable-column">
+                  {interns.map((profile) => (
+                    <ProfileCard key={profile.id} profile={profile} />
+                  ))}
+                </div>
+              </div>
+              <div className="network-column">
+                <h2>Group Chats</h2>
+                <div className="scrollable-column">
+                  <p>No group chats yet</p>
+                </div>
               </div>
             </div>
-            <div className="network-column">
-              <h2>Interns</h2>
-              <div className="scrollable-column">
-                {interns.map((profile) => (
-                  <ProfileCard key={profile.id} profile={profile} />
-                ))}
-              </div>
-            </div>
-            <div className="network-column">
-              <h2>Group Chats</h2>
-              <div className="scrollable-column">
-                <p>No group chats yet</p>
-              </div>
-            </div>
-          </div>
-        )}
+          </>
+        ) : view === 'askai' ? (
+          <AskAI />
+        ) : view === 'modules' ? (
+          <Modules />
+        ) : null}
       </main>
     </div>
   );

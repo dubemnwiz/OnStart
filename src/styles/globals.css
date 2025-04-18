@@ -74,7 +74,7 @@ body {
 }
 
 .network-main.tasks {
-  background: #f3e5f5;
+  background: white;
   color: #333;
 }
 
@@ -91,6 +91,7 @@ body {
   padding: 2rem;
   border-radius: 12px;
   margin-bottom: 2rem;
+  color: black;
 }
 
 .network-columns {
@@ -106,7 +107,7 @@ body {
 }
 
 .network-column {
-  background: white;
+  background: rgb(231, 227, 253);
   padding: 1rem;
   border-radius: 12px;
   /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); */
@@ -117,6 +118,7 @@ body {
 
 .network-column h2 {
   margin-bottom: 0.5rem;
+  color: black;
 }
 
 .scrollable-column {
@@ -279,7 +281,7 @@ body {
 }
 
 .button:hover {
-  background-color: #dc2626;
+  background-color: rgb(207, 198, 253);
 }
 
 .loading {
