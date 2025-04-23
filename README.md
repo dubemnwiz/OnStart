@@ -32,3 +32,4 @@ OnStart is a pre-start engagement and onboarding platform designed for interns a
 
 ---
 
+*Ignore the use of npm + yarn, there was a package that would not load from npm.
