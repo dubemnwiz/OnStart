@@ -18,9 +18,6 @@ OnStart is a pre-start engagement and onboarding platform designed for interns a
 - 📚 **Interactive Modules**  
   Educational content on company culture, tools, and team workflows
 
-- 💬 **Group Chats**  
-  Built-in community channels for interns and teammates
-
 ---
 
 ## 🛠 Tech Stack
